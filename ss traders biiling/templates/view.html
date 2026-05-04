@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Bill</title>
+<style>
+body { font-family:Arial; padding:20px; }
+table { width:100%; border-collapse:collapse; }
+th,td { border:1px solid #ccc; padding:8px; text-align:center; }
+</style>
+</head>
+
+<body>
+
+<h2>SS UNIFORMS</h2>
+<p>Bill #{{ bill.number }}</p>
+<p>{{ bill.party }} | {{ bill.date }}</p>
+
+<table>
+<tr><th>Item</th><th>Qty</th><th>Rate</th><th>Amount</th></tr>
+
+{% for i in bill["items"] %}
+<tr>
+<td>{{ i[0] }}</td>
+<td>{{ i[1] }}</td>
+<td>{{ i[2] }}</td>
+<td>{{ i[3] }}</td>
+</tr>
+{% endfor %}
+
+</table>
+
+<h3>Total: {{ bill.total }}</h3>
+
+</body>
+</html>

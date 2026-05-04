@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>SS Billing</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+    font-family: Arial;
+    background: linear-gradient(135deg,#0f172a,#1e293b);
+    color:white;
+    padding:10px;
+}
+.container { max-width:600px; margin:auto; }
+
+.card {
+    background: rgba(255,255,255,0.05);
+    padding:20px;
+    border-radius:12px;
+    box-shadow:0 0 10px rgba(0,0,0,0.3);
+}
+
+input {
+    width:100%;
+    padding:10px;
+    margin-top:8px;
+    border:none;
+    border-radius:6px;
+}
+
+.row { display:flex; gap:10px; }
+
+button {
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+    border:none;
+    border-radius:6px;
+    color:white;
+    font-weight:bold;
+}
+
+.green { background:#22c55e; }
+.blue { background:#3b82f6; }
+
+.bill {
+    background:white;
+    color:black;
+    padding:20px;
+    margin-top:20px;
+    border-radius:10px;
+}
+
+table { width:100%; border-collapse:collapse; }
+th,td { border:1px solid #ccc; padding:8px; text-align:center; }
+
+.history { margin-top:20px; }
+.item {
+    padding:10px;
+    border-bottom:1px solid rgba(255,255,255,0.1);
+}
+a { color:white; text-decoration:none; }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="card">
+
+<h2>SS Uniforms Billing</h2>
+
+<form method="POST">
+
+<input name="party" placeholder="Party Name">
+<input type="date" name="date">
+
+<h3>Items</h3>
+
+<div class="row">
+<input name="pants_qty" placeholder="Pants Qty">
+<input name="pants_rate" placeholder="Rate">
+</div>
+
+<div class="row">
+<input name="pants_l_qty" placeholder="Pants Large Qty">
+<input name="pants_l_rate" placeholder="Rate">
+</div>
+
+<div class="row">
+<input name="shirts_qty" placeholder="Shirts Qty">
+<input name="shirts_rate" placeholder="Rate">
+</div>
+
+<div class="row">
+<input name="shirts_sml_qty" placeholder="Shirts SML Qty">
+<input name="shirts_sml_rate" placeholder="Rate">
+</div>
+
+<h3>Other Item</h3>
+<input name="other_name" placeholder="Item Name">
+<div class="row">
+<input name="other_qty" placeholder="Qty">
+<input name="other_rate" placeholder="Rate">
+</div>
+
+<button class="green">Generate Bill</button>
+
+</form>
+
+</div>
+
+{% if bill %}
+<div class="bill">
+
+<h3>Bill #{{ bill.number }}</h3>
+<p>{{ bill.party }} | {{ bill.date }}</p>
+
+<table>
+<tr><th>Item</th><th>Qty</th><th>Rate</th><th>Amount</th></tr>
+
+{% for i in bill["items"] %}
+<tr>
+<td>{{ i[0] }}</td>
+<td>{{ i[1] }}</td>
+<td>{{ i[2] }}</td>
+<td>{{ i[3] }}</td>
+</tr>
+{% endfor %}
+
+</table>
+
+<h3>Total: {{ bill.total }}</h3>
+
+<a href="/pdf/{{ bill.number }}">
+<button class="blue">⬇ Download PDF</button>
+</a>
+
+</div>
+{% endif %}
+
+{% if history %}
+<div class="history">
+<h3>History</h3>
+
+{% for b in history %}
+<a href="/bill/{{ b.number }}">
+<div class="item">
+Bill {{ b.number }} | {{ b.party }} | {{ b.total }}
+</div>
+</a>
+{% endfor %}
+
+</div>
+{% endif %}
+
+</div>
+
+</body>
+</html>
